@@ -1,15 +1,17 @@
 package org.example.server;
 
 import javax.swing.*;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ClientGUI extends JFrame {
-    private final JTextArea messageArea;      // Текстовая область для отображения сообщений
+    private JTextArea messageArea;      // Текстовая область для отображения сообщений
     private final JTextField messageField;   // Поле для ввода сообщений
     private final MessageModel messageModel; // Модель сообщений, используемая для отправки и получения данных
-//    private final JLabel statusLabel;         // Метка для статуса подключения
+
+    //    private final JLabel statusLabel;         // Метка для статуса подключения
     public ClientGUI(MessageModel messageModel) {
         this.messageModel = messageModel; // Сохраняем ссылку на модель для обмена сообщениями
 
@@ -49,14 +51,27 @@ public class ClientGUI extends JFrame {
         messageField = new JTextField();       // Поле для ввода текста сообщения
         JButton sendButton = new JButton("Send"); // Кнопка для отправки сообщения
 
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Убираем верхнюю панель
+                topPanel.setVisible(false);
+                // Добавляем сообщение "Чат запущен" в текстовую область
+                messageArea.append("Чат запущен\n");
+//
+            }
+        });
         // Добавляем обработчик события нажатия кнопки "Send"
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = messageField.getText(); // Получаем текст из поля ввода
-                if (!message.isEmpty()) {               // Проверяем, что поле ввода не пустое
+                if (!message.isEmpty() && !topPanel.isVisible()) {// Проверяем, что поле ввода не пустое
                     messageModel.sendMessage(message);  // Отправляем сообщение через модель
                     messageField.setText("");           // Очищаем поле ввода
+                    setVisible(true);
+
                 }
             }
         });
@@ -76,7 +91,7 @@ public class ClientGUI extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);    // Панель ввода сообщений располагается внизу
 //        add(statusLabel, BorderLayout.CENTER);   // Метка со статусом подключается по центру
 
-        // Добавляем слушателя для модели сообщений
+//         Добавляем слушателя для модели сообщений
         messageModel.addMessageListener(new MessageListener() {
             @Override
             public void onMessageReceived(String message) {
@@ -88,4 +103,6 @@ public class ClientGUI extends JFrame {
         setVisible(true);
     }
 }
+
+
 
