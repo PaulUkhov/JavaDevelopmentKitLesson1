@@ -4,14 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 public class ServerWindow extends JFrame {
     private final MessageModel messageModel; // Модель сообщений, используется для обмена сообщениями между окнами
     private static final int WIDTH = 500;    // Ширина окна
     private static final int HEIGHT = 500;   // Высота окна
-
+    private JLabel messageStatusLabel;       // Метка для отображения статуса сервера
+    private final String MESSAGE_AREA = "Сервер запущен";      // Текстовая область для отображения сообщений
     private JButton btnStart;    // Кнопка запуска клиентского окна
     private JButton btnStop;     // Кнопка остановки (завершения работы приложения)
     private ClientGUI clientGUI; // Клиентское окно чата
+
 
     public ServerWindow(MessageModel messageModel) {
         this.messageModel = messageModel;
@@ -23,9 +26,15 @@ public class ServerWindow extends JFrame {
         setTitle("Chat Server");                // Устанавливаем заголовок окна
         setResizable(false);                    // Запрещаем изменение размеров окна
 
+
+        // Создаем метку для отображения статуса
+        messageStatusLabel = new JLabel(MESSAGE_AREA, JLabel.CENTER);
+        add(messageStatusLabel); // Добавляем метку статуса
+        
         // Создаем кнопки для управления сервером
         btnStart = new JButton("Start"); // Кнопка для запуска клиентского окна
         btnStop = new JButton("Stop");   // Кнопка для завершения работы приложения
+
 
         // Обработчик кнопки "Start"
         btnStart.addActionListener(new ActionListener() {
@@ -69,6 +78,4 @@ public class ServerWindow extends JFrame {
         setVisible(true);
     }
 }
-
-
 
